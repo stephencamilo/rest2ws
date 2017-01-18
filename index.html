@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <script src="//www.google.com/jsapi"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>google.load("jquery", "1.7.1")</script>
+  <script>
+  var socket = io.connect('http://localhost:2222');
+  socket.on("foo", function(message) {  notifyMe(message.message);});
+  function notifyMe(message) {
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  else if (Notification.permission === "granted") {
+    var notification = new Notification(message);
+  }
+
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+      if (permission === "granted") {
+        var notification = new Notification(message);
+      }
+    });
+  }
+}
+  </script>
+</head>
+</html>
